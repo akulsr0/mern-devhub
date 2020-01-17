@@ -10,17 +10,13 @@ module.exports = (req, res, next) => {
   }
   // Verify Token
   try {
-    const decoded = jwt.verify(
-      token,
-      config.get('jwtToken'),
-      (err, decoded) => {
-        if (err) {
-          res.status(401).json({ msg: 'Invalid Token' });
-        }
-        req.user = decoded.user;
-        next();
+    jwt.verify(token, config.get('jwtToken'), (err, decoded) => {
+      if (err) {
+        res.status(401).json({ msg: 'Invalid Token' });
       }
-    );
+      req.user = decoded.user;
+      next();
+    });
   } catch (err) {
     res.status(401).json({ msg: 'Server Error' });
   }
